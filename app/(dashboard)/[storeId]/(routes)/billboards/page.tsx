@@ -22,8 +22,6 @@ const BillboardsPage = async ({
     label: item.label,
     createdAt: format(item.createdAt, "MMMM do, yyyy")
   }))
-  console.log(formattedBillboards);
-  console.log(billboards);
   
   return (
     <div className='flex-col'>
