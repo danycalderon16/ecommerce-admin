@@ -2,7 +2,7 @@
 import React, { useState } from 'react'
 import { useParams, useRouter } from 'next/navigation';
 import axios from 'axios';
-import { BillboardColumn } from './columns'
+import { OrderColumn } from './columns'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
 import { Copy, Delete, Edit, MoreHorizontal } from 'lucide-react';
@@ -10,7 +10,7 @@ import toast from 'react-hot-toast';
 import { AlertModal } from '@/components/modals/alert-modal';
 
 interface CellActionProps {
-  data: BillboardColumn;
+  data: OrderColumn;
 }
 
 export const CellAction:React.FC<CellActionProps> = ({
