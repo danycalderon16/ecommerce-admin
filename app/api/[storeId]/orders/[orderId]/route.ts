@@ -4,28 +4,28 @@ import { NextResponse } from "next/server";
 
 export async function PATCH(
   req: Request,
-  { params }: { params: {storeId:string, categoryId: string } }
+  { params }: { params: { storeId: string, billboardId: string } }
 ) {
   try {
     const { userId } = auth();
     const body = await req.json();
 
-    const { name, billboardId } = body;
+    const { label, imageUrl } = body;
 
     if (!userId) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
-    if (!name) {
-      return new NextResponse("name is required", { status: 400 });
+    if (!label) {
+      return new NextResponse("Label is required", { status: 400 });
     }
 
-    if (!billboardId) {
-      return new NextResponse("Billboard ID is required", { status: 400 });
+    if (!imageUrl) {
+      return new NextResponse("Image URL is required", { status: 400 });
     }
 
-    if (!params.categoryId) {
-      return new NextResponse("Category id is required", { status: 400 });
+    if (!params.billboardId) {
+      return new NextResponse("Store id is required", { status: 400 });
     }
 
     const storeByUserId = await prismadb.store.findFirst({
@@ -39,26 +39,26 @@ export async function PATCH(
       return new NextResponse("Unauthorized", { status: 403 });
     }
 
-    const category = await prismadb.category.updateMany({
+    const store = await prismadb.billboard.updateMany({
       where: {
-        id: params.categoryId
+        id: params.billboardId
       },
       data: {
-        name,
-        billboardId
+        label,
+        imageUrl
       },
     });
 
-    return NextResponse.json(category);
+    return NextResponse.json(store);
   } catch (error) {
-    console.log("[CATEGORY_PATCH]", error);
+    console.log("[BILLBOARD_PATCH]", error);
     return new NextResponse("Internal server error", { status: 500 });
   }
 }
 
 export async function DELETE(
   _req: Request,
-  { params }: { params: {storeId: string, categoryId: string } }
+  { params }: { params: {storeId: string, billboardId: string } }
 ) {
   try {
     const { userId } = auth();
@@ -66,8 +66,8 @@ export async function DELETE(
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
-    if (!params.categoryId) {
-      return new NextResponse("Category id is required", { status: 400 });
+    if (!params.billboardId) {
+      return new NextResponse("Billboard id is required", { status: 400 });
     }
       
     const storeByUserId = await prismadb.store.findFirst({
@@ -81,40 +81,38 @@ export async function DELETE(
       return new NextResponse("Unauthorized", { status: 403 });
     }
 
-    const category = await prismadb.category.deleteMany({
+    const billboard = await prismadb.billboard.deleteMany({
       where: {
-        id: params.categoryId,
+        id: params.billboardId,
       },
     });
 
-    return NextResponse.json(category);
+    return NextResponse.json(billboard);
   } catch (error) {
-    console.log("[CATEGORY_DELETE]", error);
+    console.log("[BILLBOARD_DELETE]", error);
     return new NextResponse("Internal server error", { status: 500 });
   }
 }
 
 export async function GET(
   _req: Request,
-  { params }: { params: {categoryId: string } }
+  { params }: { params: {billboardId: string } }
 ) {
   try {
-    if (!params.categoryId) {
-      return new NextResponse("Category id is required", { status: 400 });
+    if (!params.billboardId) {
+      return new NextResponse("Billboard id is required", { status: 400 });
     }
-        
-    const category = await prismadb.category.findUnique({
+      
+   
+    const billboard = await prismadb.billboard.findUnique({
       where: {
-        id: params.categoryId,
+        id: params.billboardId,
       },
-      include:{
-        billboard: true
-      }
     });
 
-    return NextResponse.json(category);
+    return NextResponse.json(billboard);
   } catch (error) {
-    console.log("[CATEGORY_GET]", error);
+    console.log("[BILLBOARD_GET]", error);
     return new NextResponse("Internal server error", { status: 500 });
   }
 }
